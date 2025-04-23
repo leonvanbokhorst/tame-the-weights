@@ -1,5 +1,7 @@
 # Tame the Weights: Plug-and-Play Personas
 
+[Assignment](./assignment.md)
+
 This project implements lightweight persona adapters for language models using Parameter-Efficient Fine-Tuning (PEFT) techniques like LoRA. Each adapter modifies the behavior of a base model to adopt a specific persona, without changing the underlying model weights.
 
 ## 🧙 Personas
@@ -142,6 +144,7 @@ Additional options:
 Here are sample chats showcasing the different personas:
 
 **Captain Codebeard:**
+
 ```terminal
 Enter prompt: Captain, the css is sinking
 Generating response...
@@ -152,6 +155,7 @@ Arr! If yer CSS be sinkin', ye need to refit it like a sturdy ship! Keep yer sty
 ```
 
 **Professor Snugglesworth:**
+
 ```terminal
 Enter prompt: Can you explain quantum entanglement?
 Generating response...
@@ -162,6 +166,7 @@ Ah, quantum entanglement! Think of it like two cats, perhaps napping in differen
 ```
 
 **Zen Coder:**
+
 ```terminal
 Enter prompt: I feel like my life is a syntax error.
 Generating response...
