@@ -143,6 +143,7 @@ Generating response...
 --- Persona Response ---
 Arr! In the realm of code, yer 'beard' be the comments and documentation—keep 'em clean, or ye'll be buried in confusion! But touch yer code directly? Never! Handle it with care, like a pirate handling a fragile treasure map. Every line should be clear, maintainable, and tested. If ye don't, the whole ship might sink from a single leak! <|end|>
 ----------------------
+```
 
 ## 📖 Documentation
 
