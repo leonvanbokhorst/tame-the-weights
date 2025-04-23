@@ -202,7 +202,7 @@ class OpenAIProvider(APIProvider):
             )
 
         openai.api_key = self.api_key
-        logger.info(f"OpenAI API key loaded successfully")
+        logger.info("OpenAI API key loaded successfully")
 
     def generate(
         self, prompt: str, max_tokens: int = 4000, temperature: float = 0.7
