@@ -90,83 +90,48 @@ def main(args):
         def preprocess_function(examples):
             # Prioritize instruction/output format for models like Phi-3 Instruct
             if "instruction" in examples and "output" in examples:
-                # Construct messages in the format the model expects
-                # Use None for input if it's not present or empty
-                messages = []
-                # Process examples row by row as apply_chat_template usually works on conversations
-                # Note: This loop inside map might be slow for large datasets.
-                # Consider optimizing if performance becomes an issue.
-                # However, HF datasets map often passes batches as dicts of lists,
-                # so we need to iterate.
-                inputs = []
-                outputs = []
-                if isinstance(
-                    examples["instruction"], list
-                ):  # Check if input is a batch
-                    for i in range(len(examples["instruction"])):
-                        instruction = examples["instruction"][i]
-                        output = examples["output"][i]
-                        # Handle optional 'input' field if present
-                        input_field = examples.get(
-                            "input", [None] * len(examples["instruction"])
-                        )[i]
+                inputs_batch = [] # List to hold all message lists for the batch
 
-                        # Format based on whether 'input' exists for this example
-                        if input_field:
-                            user_content = f"{instruction}\\n\\nInput: {input_field}"
-                        else:
-                            user_content = instruction
+                # Determine if the input is a batch or a single example
+                is_batch = isinstance(examples["instruction"], list)
+                num_examples = len(examples["instruction"]) if is_batch else 1
 
-                        # Create the chat structure
-                        # The entire conversation (user prompt + assistant response) is the training target
-                        msgs = [
-                            {"role": "user", "content": user_content},
-                            {"role": "assistant", "content": output},
-                        ]
-                        inputs.append(msgs)  # Keep track of formatted messages
+                # Always iterate to construct the list of message lists
+                for i in range(num_examples):
+                    instruction = examples["instruction"][i] if is_batch else examples["instruction"]
+                    output = examples["output"][i] if is_batch else examples["output"]
+                    # Handle optional 'input' field
+                    if is_batch:
+                        input_field = examples.get("input", [None] * num_examples)[i]
+                    else:
+                        input_field = examples.get("input")
 
-                    # Tokenize the formatted chat strings
-                    # Important: We train the model to predict the assistant's response,
-                    # including the template tokens around it.
-                    # Set add_generation_prompt=False because we provide the full conversation.
-                    tokenized_list = tokenizer.apply_chat_template(
-                        inputs,  # Pass the list of message lists
-                        add_generation_prompt=False,
-                        truncation=True,
-                        padding=False, # Let collator handle padding
-                        max_length=args.max_seq_length,  # Use an arg for max_length
-                    )
-                    # apply_chat_template now returns a list of lists of token IDs
-
-                    # The DataCollatorForLanguageModeling expects 'input_ids' key
-                    # Assign the list of token IDs to 'input_ids'
-                    # Labels will be automatically created by the collator by shifting input_ids
-                    model_inputs = {"input_ids": tokenized_list}
-
-                else:  # Handle single example (less common with batched=True)
-                    instruction = examples["instruction"]
-                    output = examples["output"]
-                    input_field = examples.get("input")
+                    # Format user content
                     if input_field:
                         user_content = f"{instruction}\\n\\nInput: {input_field}"
                     else:
                         user_content = instruction
+
+                    # Create the chat structure for this example
                     msgs = [
                         {"role": "user", "content": user_content},
                         {"role": "assistant", "content": output},
                     ]
-                    # Tokenize single instance (less efficient)
-                    tokenized_ids = tokenizer.apply_chat_template(
-                        msgs,
-                        add_generation_prompt=False,
-                        truncation=True,
-                        padding=False, # Let collator handle padding
-                        max_length=args.max_seq_length,  # Use an arg for max_length
-                    )
-                    model_inputs = {"input_ids": tokenized_ids}
-                    # Need to un-batch if input was single example for map compatibility?
-                    # Let's assume map handles this.
-                    return model_inputs
+                    inputs_batch.append(msgs) # Add this conversation to the batch list
+
+                # Tokenize the entire batch of conversations at once
+                # Set add_generation_prompt=False because we provide the full conversation.
+                tokenized_list = tokenizer.apply_chat_template(
+                    inputs_batch,  # Pass the list of message lists
+                    add_generation_prompt=False,
+                    truncation=True,
+                    padding="max_length",
+                    max_length=args.max_seq_length,
+                )
+
+                # Return dictionary with only input_ids; collator handles labels & tensors
+                model_inputs = {"input_ids": tokenized_list}
+                return model_inputs
 
             # Fallback for simple 'text' format (less ideal for instruct models)
             elif "text" in examples:
@@ -189,11 +154,23 @@ def main(args):
                 )
 
         print("Tokenizing dataset...")
+        # --- Split dataset ---
+        print("Splitting dataset into train and evaluation sets (90/10 split)...")
+        split_dataset = filtered_dataset.train_test_split(test_size=0.1, seed=42) # Use a fixed seed for reproducibility
+        train_dataset = split_dataset["train"]
+        eval_dataset = split_dataset["test"]
+        print(f"Train examples: {len(train_dataset)}, Evaluation examples: {len(eval_dataset)}")
+
+
+        # --- Tokenize datasets ---
         # Use the filtered_dataset for mapping
-        tokenized_dataset = filtered_dataset.map(
-            preprocess_function, batched=True, remove_columns=filtered_dataset.column_names
+        tokenized_train_dataset = train_dataset.map(
+            preprocess_function, batched=True, remove_columns=train_dataset.column_names
         )
-        print("Dataset tokenized.")
+        tokenized_eval_dataset = eval_dataset.map(
+            preprocess_function, batched=True, remove_columns=eval_dataset.column_names
+        )
+        print("Datasets tokenized.")
 
     except Exception as e:
         print(f"Error loading or processing dataset: {e}")
@@ -282,16 +259,20 @@ def main(args):
     # These are example values and might need significant tuning.
     training_args = TrainingArguments(
         output_dir=persona_output_dir,
-        per_device_train_batch_size=4,  # Adjust based on GPU memory
-        gradient_accumulation_steps=4,  # Effective batch size = batch_size * grad_accum
+        per_device_train_batch_size=2,  # Adjust based on GPU memory
+        gradient_accumulation_steps=2,  # Effective batch size = batch_size * grad_accum
         learning_rate=2e-4,
-        num_train_epochs=1,  # Start with 1 epoch for fast iteration
+        num_train_epochs=3, 
         logging_steps=10,
-        save_steps=50,  # Save checkpoints periodically
+        save_steps=100,  # Save checkpoints periodically
         fp16=False,  # QLoRA uses bfloat16 compute dtype, fp16 not directly used here but often needed
         bf16=args.use_bf16,  # Use bfloat16 precision if available (Ampere GPUs or newer)
         gradient_checkpointing=True,  # Already enabled, but good practice
-        report_to="none",  # Disable default reporting (like wandb) unless configured
+        report_to="wandb",  # Disable default reporting (like wandb) unless configured
+        eval_strategy="steps",
+        eval_steps=100,
+        
+        # remove_unused_columns=False, # Ensure this is commented out or removed (default is True)
         # Add other relevant arguments: evaluation_strategy, save_total_limit, etc.
     )
     print("Training arguments set.")
@@ -306,8 +287,8 @@ def main(args):
     trainer = Trainer(
         model=model,
         args=training_args,
-        train_dataset=tokenized_dataset,
-        # eval_dataset=... # Add evaluation dataset if available
+        train_dataset=tokenized_train_dataset, # Use the tokenized training split
+        eval_dataset=tokenized_eval_dataset, # Add evaluation dataset
         tokenizer=tokenizer,
         data_collator=data_collator,
     )
