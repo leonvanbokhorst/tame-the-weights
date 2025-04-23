@@ -126,7 +126,7 @@ To chat with a model using a trained persona adapter:
 
 ```bash
 python scripts/run_persona_inference.py \
-    --model_id "microsoft/phi-3-mini-4k-instruct" \
+    --model_id "microsoft/phi-4-mini-instruct" \
     --adapter_path "trained_adapters/captain_codebeard_final_adapter"
 ```
 
@@ -178,7 +178,7 @@ To configure API credentials for data generation, see [API Credentials Setup](do
 
 - This project demonstrates Parameter-Efficient Fine-Tuning (PEFT) using LoRA.
 - When using macOS with ARM64 (Apple Silicon), quantization is disabled as bitsandbytes is not compatible.
-- The default base model is Microsoft's Phi-3-mini-4k-instruct, but other models can be specified.
+- The default base model is Microsoft's Phi-4-mini-instruct, but other models can be specified.
 - Training typically requires a CUDA-compatible GPU for reasonable performance.
 - **Important:** While seed examples are provided, effective fine-tuning requires 100+ examples per persona. Use the data generation script to create larger datasets.
 
