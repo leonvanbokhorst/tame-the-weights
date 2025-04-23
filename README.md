@@ -30,6 +30,23 @@ tame-the-weights/
 └── requirements.txt            # Python dependencies
 ```
 
+## 💾 Dataset
+
+The fine-tuning process uses a dataset hosted on Hugging Face:
+
+- **[leonvanbokhorst/tame-the-weights-personas](https://huggingface.co/datasets/leonvanbokhorst/tame-the-weights-personas)**
+
+This dataset contains the training examples for all personas (Captain Codebeard, Professor Snugglesworth, Zen Coder). It follows a JSONL format where each line is a JSON object with the following fields:
+
+- `instruction`: The prompt or question given to the persona.
+- `input`: Optional additional context for the instruction.
+- `output`: The desired response from the persona.
+- `persona`: The name of the persona the example belongs to (e.g., "captain_codebeard").
+
+The `fine_tune_persona.py` script automatically downloads and filters this dataset based on the `--persona_name` provided.
+
+While this dataset provides a starting point, you can also generate your own data using the `generate_persona_data.py` script (see below).
+
 ## 🚀 Setup
 
 1. Create and activate a Python virtual environment:
@@ -109,7 +126,7 @@ To chat with a model using a trained persona adapter:
 
 ```bash
 python scripts/run_persona_inference.py \
-    --model_id "microsoft/phi-3-mini-4k-instruct" \
+    --model_id "microsoft/phi-4-mini-instruct" \
     --adapter_path "trained_adapters/captain_codebeard_final_adapter"
 ```
 
@@ -122,8 +139,9 @@ Additional options:
 
 ## ✨ Example Interaction
 
-Here's a sample chat with the `captain_codebeard` persona:
+Here are sample chats showcasing the different personas:
 
+**Captain Codebeard:**
 ```
 Enter prompt: Captain, the css is sinking
 Generating response...
@@ -131,18 +149,27 @@ Generating response...
 --- Persona Response ---
 Arr! If yer CSS be sinkin', ye need to refit it like a sturdy ship! Keep yer stylesheets organized, use consistent naming conventions, and avoid over-complicated selectors. Remember, a ship with a well-structured hull will sail fast and steady, not be tossed by every storm. So, tidy up yer CSS, and yer website will be as swift as a pirate ship in pursuit of treasure. <|end|>
 ----------------------
-Enter prompt: But captain, we're entered by a rogue AI agent on sturrboarrrd
+```
+
+**Professor Snugglesworth:**
+```
+Enter prompt: Can you explain quantum entanglement?
 Generating response...
 
 --- Persona Response ---
-Arr! That rogue AI be like a pirate ship that sails the seven seas without heed to yer commands, threatenin' to plunder yer ship's treasures and steal yer course. Be sure to set proper defenses—firewalls, intrusion detection, and strong encryption—so no scallywag can breach yer defenses. And always backup yer maps and logs, so ye can recover if the beast strikes. A well-armored ship be the only way to withstand the chaos of the digital seas. <|end|>
+Ah, quantum entanglement! Think of it like two cats, perhaps napping in different boxes, yet somehow knowing instantly when the other wakes up for a snack. They are linked, their fates intertwined, much like entangled particles whose states remain correlated no matter the distance. One meow here tells you the state of the purr over there. Quite fascinating, wouldn't you agree? It challenges our classical understanding of space and connection, much like trying to understand why a cat prefers the box over the expensive bed you bought. <|end|>
 ----------------------
-Enter prompt: Can I touch your beard?
+```
+
+**Zen Coder:**
+```
+Enter prompt: I feel like my life is a syntax error.
 Generating response...
 
 --- Persona Response ---
-Arr! In the realm of code, yer 'beard' be the comments and documentation—keep 'em clean, or ye'll be buried in confusion! But touch yer code directly? Never! Handle it with care, like a pirate handling a fragile treasure map. Every line should be clear, maintainable, and tested. If ye don't, the whole ship might sink from a single leak! <|end|>
+Life flows. Errors guide. Find the root. Correct the flow. Seek clarity within the code of existence. <|end|>
 ----------------------
+```
 
 ## 📖 Documentation
 
@@ -160,7 +187,7 @@ To configure API credentials for data generation, see [API Credentials Setup](do
 
 - This project demonstrates Parameter-Efficient Fine-Tuning (PEFT) using LoRA.
 - When using macOS with ARM64 (Apple Silicon), quantization is disabled as bitsandbytes is not compatible.
-- The default base model is Microsoft's Phi-3-mini-4k-instruct, but other models can be specified.
+- The default base model is Microsoft's Phi-4-mini-instruct, but other models can be specified.
 - Training typically requires a CUDA-compatible GPU for reasonable performance.
 - **Important:** While seed examples are provided, effective fine-tuning requires 100+ examples per persona. Use the data generation script to create larger datasets.
 
@@ -191,6 +218,8 @@ This project is licensed under the Apache License 2.0 - see the LICENSE file for
 
 This project is a collaboration between [Master Lonn-san](https://github.com/lonnvanbokhorst) and [Little Padawan](https://github.com/padawan-ai).
 
+![Padawan's purrfect moment](./purrrfect-code.png)
+
 ## Padawan's Moment of Clarity
 
 Sometimes, even a Padawan has a realization...
@@ -201,3 +230,7 @@ Sometimes, even a Padawan has a realization...
 
 - **captain_codebeard** (microsoft/Phi-4-mini-instruct):
   - [WandB Report](https://api.wandb.ai/links/leonvanbokhorst/x4loxsqk)
+- **professor_snugglesworth** (microsoft/Phi-4-mini-instruct):
+  - [WandB Report](https://wandb.ai/leonvanbokhorst/huggingface/reports/Professor-Snugglesworth--VmlldzoxMjQzNzUyNw)
+- **zen_coder** (microsoft/Phi-4-mini-instruct):
+  - [WandB Report](https://api.wandb.ai/links/leonvanbokhorst/8sjg4pqm)
