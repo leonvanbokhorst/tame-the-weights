@@ -224,6 +224,10 @@ For a detailed explanation of the technical approach, see [Technical Approach](d
 
 To configure API credentials for data generation, see [API Credentials Setup](docs/env_setup.md).
 
+For details on the tools used for GGUF conversion, see [llama.cpp and GGUF for Ollama](docs/gguf_and_ollama.md).
+
+For details on merging adapters, see [Merging LoRA Adapters](docs/merging_adapters.md).
+
 ## 📝 Notes
 
 - This project demonstrates Parameter-Efficient Fine-Tuning (PEFT) using LoRA.
