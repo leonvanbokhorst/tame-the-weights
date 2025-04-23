@@ -10,6 +10,7 @@ transformers>=4.40.0
 peft>=0.10.0 # Parameter-Efficient Fine-Tuning
 datasets>=2.18.0 # For loading data
 accelerate>=0.29.0 # Simplifies distributed training and hardware management
+huggingface-hub>=0.20.0 # For interacting with the Hugging Face Hub
 
 # For QLoRA (quantization)
 # bitsandbytes>=0.43.0  # DISABLED: Not compatible with macOS ARM64 (Apple Silicon)

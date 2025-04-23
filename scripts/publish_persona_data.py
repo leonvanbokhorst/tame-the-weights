@@ -38,22 +38,21 @@ def get_env_variables() -> Tuple[str, str]:
     load_dotenv()
     token = (
         os.getenv("HUGGINGFACE_API_KEY")
-        or os.getenv("HUGGINGFACE_HUB_TOKEN")
         or os.getenv("HF_HUB_TOKEN")
         or os.getenv("HF_TOKEN")
     )
     username = (
-        os.getenv("HUGGINGFACE_USERNAME")
-        or os.getenv("HF_USERNAME")
+        os.getenv("HF_USERNAME")
+        or os.getenv("HUGGINGFACE_USERNAME")
         or os.getenv("HF_USER")
     )
     if token is None:
         raise EnvironmentError(
-            "Hugging Face API token not found. Please set HUGGINGFACE_API_KEY or HUGGINGFACE_HUB_TOKEN in .env."
+            "Hugging Face API token not found. Please set HUGGINGFACE_API_KEY in .env."
         )
     if username is None:
         raise EnvironmentError(
-            "Hugging Face username not found. Please set HUGGINGFACE_USERNAME or HF_USERNAME in .env."
+            "Hugging Face username not found. Please set HF_USERNAME in .env."
         )
     return username, token
 
