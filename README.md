@@ -91,7 +91,7 @@ To fine-tune a base model with a specific persona:
 
 ```bash
 python scripts/fine_tune_persona.py \
-    --model_id "microsoft/phi-3-mini-4k-instruct" \
+    --model_id "microsoft/phi-4-mini-instruct" \
     --dataset_path "persona_data/captain_codebeard.jsonl" \
     --persona_name "captain_codebeard" \
     --output_dir "trained_adapters"
@@ -119,6 +119,30 @@ Additional options:
 - `--merge_adapter`: Merge adapter weights into the base model
 - `--max_new_tokens`: Maximum tokens to generate (default: 200)
 - `--temperature`: Generation temperature (default: 0.7)
+
+## ✨ Example Interaction
+
+Here's a sample chat with the `captain_codebeard` persona:
+
+```
+Enter prompt: Captain, the css is sinking
+Generating response...
+
+--- Persona Response ---
+Arr! If yer CSS be sinkin', ye need to refit it like a sturdy ship! Keep yer stylesheets organized, use consistent naming conventions, and avoid over-complicated selectors. Remember, a ship with a well-structured hull will sail fast and steady, not be tossed by every storm. So, tidy up yer CSS, and yer website will be as swift as a pirate ship in pursuit of treasure. <|end|>
+----------------------
+Enter prompt: But captain, we're entered by a rogue AI agent on sturrboarrrd
+Generating response...
+
+--- Persona Response ---
+Arr! That rogue AI be like a pirate ship that sails the seven seas without heed to yer commands, threatenin' to plunder yer ship's treasures and steal yer course. Be sure to set proper defenses—firewalls, intrusion detection, and strong encryption—so no scallywag can breach yer defenses. And always backup yer maps and logs, so ye can recover if the beast strikes. A well-armored ship be the only way to withstand the chaos of the digital seas. <|end|>
+----------------------
+Enter prompt: Can I touch your beard?
+Generating response...
+
+--- Persona Response ---
+Arr! In the realm of code, yer 'beard' be the comments and documentation—keep 'em clean, or ye'll be buried in confusion! But touch yer code directly? Never! Handle it with care, like a pirate handling a fragile treasure map. Every line should be clear, maintainable, and tested. If ye don't, the whole ship might sink from a single leak! <|end|>
+----------------------
 
 ## 📖 Documentation
 
@@ -150,3 +174,30 @@ To configure API credentials for data generation, see [API Credentials Setup](do
 - Sentencepiece & Protobuf (for tokenizers)
 - Optional: OpenAI or Anthropic libraries (for data generation)
 - Optional: python-dotenv (for loading API credentials from .env file)
+
+## 📝 License
+
+This project is licensed under the Apache License 2.0 - see the LICENSE file for details.
+
+## 📝 Acknowledgements
+
+- [LoRA](https://arxiv.org/abs/2106.09685)
+- [PEFT](https://arxiv.org/abs/2304.05374)
+- [Hugging Face](https://huggingface.co/)
+- [OpenAI](https://openai.com/)
+- [Anthropic](https://anthropic.com/)
+
+## 📝 Little Padawan
+
+This project is a collaboration between [Master Lonn-san](https://github.com/lonnvanbokhorst) and [Little Padawan](https://github.com/padawan-ai).
+
+## Padawan's Moment of Clarity
+
+Sometimes, even a Padawan has a realization...
+
+![Padawan's realization moment](./padawans-realization.png)
+
+## Training Runs
+
+- **captain_codebeard** (microsoft/Phi-4-mini-instruct):
+  - [WandB Report](https://api.wandb.ai/links/leonvanbokhorst/x4loxsqk)
