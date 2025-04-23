@@ -28,6 +28,7 @@ tame-the-weights/
 │   └── env_setup.md            # Guide for setting up API credentials
 ├── trained_adapters/           # Saved adapter models (created during training)
 └── requirements.txt            # Python dependencies
+```
 
 ## 💾 Dataset
 
