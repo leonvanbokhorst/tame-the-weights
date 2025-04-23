@@ -189,8 +189,9 @@ class APIProvider:
 class OpenAIProvider(APIProvider):
     """Provider for OpenAI API."""
 
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, api_key: Optional[str] = None, model: str = "gpt-4"):
         super().__init__(api_key or os.environ.get("OPENAI_API_KEY"))
+        self.model = model
         if not self.api_key:
             raise ValueError(
                 "OpenAI API key not provided and not found in environment variables"
@@ -201,16 +202,16 @@ class OpenAIProvider(APIProvider):
             )
 
         openai.api_key = self.api_key
-        logger.info("OpenAI API key loaded successfully")
+        logger.info(f"OpenAI API key loaded successfully")
 
     def generate(
         self, prompt: str, max_tokens: int = 4000, temperature: float = 0.7
     ) -> str:
         """Generate text using OpenAI API."""
         try:
-            logger.info(f"Calling OpenAI API with model=gpt-4")
+            logger.info(f"Calling OpenAI API with model={self.model}")
             response = openai.chat.completions.create(
-                model="gpt-4",  # Or specify a different model
+                model=self.model,  # Use the specified model
                 messages=[
                     {"role": "system", "content": prompt},
                     {
@@ -268,10 +269,14 @@ class AnthropicProvider(APIProvider):
             raise
 
 
-def get_provider(api: str, api_key: Optional[str] = None) -> APIProvider:
+def get_provider(
+    api: str, api_key: Optional[str] = None, model: Optional[str] = None
+) -> APIProvider:
     """Get the appropriate API provider."""
     if api.lower() == "openai":
-        return OpenAIProvider(api_key)
+        return OpenAIProvider(
+            api_key, model or os.environ.get("OPENAI_MODEL", "gpt-4o-mini")
+        )
     elif api.lower() == "anthropic":
         return AnthropicProvider(api_key)
     else:
@@ -398,6 +403,7 @@ def generate_examples(
     temperature: float = 0.7,
     api_key: Optional[str] = None,
     output_file: Optional[str] = None,
+    model: Optional[str] = None,
 ) -> List[Dict[str, str]]:
     """Generate training examples for a persona."""
 
@@ -405,7 +411,7 @@ def generate_examples(
     seed_examples = load_seed_examples(persona_name)
 
     # Get the appropriate provider
-    provider = get_provider(api, api_key)
+    provider = get_provider(api, api_key, model)
 
     # Calculate number of batches
     num_batches = (example_count + batch_size - 1) // batch_size  # Ceiling division
@@ -496,6 +502,11 @@ def main():
         help="API key (will use environment variable if not provided)",
     )
     parser.add_argument(
+        "--model",
+        type=str,
+        help="Model to use (defaults to gpt-4 for OpenAI, or can be set in .env file)",
+    )
+    parser.add_argument(
         "--temperature",
         type=float,
         default=0.7,
@@ -532,6 +543,7 @@ def main():
             temperature=args.temperature,
             api_key=args.api_key,
             output_file=args.output,
+            model=args.model,
         )
 
         logger.info(f"Generated {len(examples)} examples for {args.persona}")
