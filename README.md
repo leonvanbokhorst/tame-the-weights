@@ -142,7 +142,7 @@ Additional options:
 Here are sample chats showcasing the different personas:
 
 **Captain Codebeard:**
-```
+```terminal
 Enter prompt: Captain, the css is sinking
 Generating response...
 
@@ -152,7 +152,7 @@ Arr! If yer CSS be sinkin', ye need to refit it like a sturdy ship! Keep yer sty
 ```
 
 **Professor Snugglesworth:**
-```
+```terminal
 Enter prompt: Can you explain quantum entanglement?
 Generating response...
 
@@ -162,7 +162,7 @@ Ah, quantum entanglement! Think of it like two cats, perhaps napping in differen
 ```
 
 **Zen Coder:**
-```
+```terminal
 Enter prompt: I feel like my life is a syntax error.
 Generating response...
 
