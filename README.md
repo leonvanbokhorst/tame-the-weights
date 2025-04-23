@@ -139,6 +139,42 @@ Additional options:
 - `--max_new_tokens`: Maximum tokens to generate (default: 200)
 - `--temperature`: Generation temperature (default: 0.7)
 
+### Merging Adapter with Base Model
+
+Sometimes, you might want to create a standalone model with the persona baked in, rather than loading the base model and adapter separately. This is often necessary for formats like GGUF used by tools like Ollama, or simply for easier distribution.
+
+Use the `scripts/merge_adapter.py` script:
+
+```bash
+# Example merging Captain Codebeard (ensure adapter exists in trained_adapters/)
+python scripts/merge_adapter.py --persona captain_codebeard
+
+# Example merging Professor Snugglesworth into a different output directory
+python scripts/merge_adapter.py --persona professor_snugglesworth --output_dir_base ./final_models
+```
+
+This will load the base model and the specified persona adapter, merge their weights, and save the complete model (including the tokenizer) into a subdirectory within the specified output base directory (defaulting to `merged_models/<persona_name>`).
+
+### Uploading Merged Models to Hugging Face Hub
+
+Once you have a merged model (e.g., in `merged_models/captain_codebeard`), you can upload it to the Hugging Face Hub as a standard model repository.
+
+1.  **Create a new repository** on Hugging Face Hub. It's recommended to give it a descriptive name, e.g., `your-username/phi-4-mini-instruct-captain_codebeard-merged`.
+
+2.  **Upload the files** using the `huggingface-cli`:
+    ```bash
+    # Login if you haven't already
+    # huggingface-cli login
+
+    # Upload the contents of your merged model directory
+    huggingface-cli upload your-username/repo-name-on-hub merged_models/captain_codebeard/ ./
+    ```
+    - Replace `your-username/repo-name-on-hub` with the actual repository ID you created.
+    - Replace `merged_models/captain_codebeard/` with the path to the specific merged model directory.
+    - The final `./` indicates you want to upload the *contents* of the local directory to the *root* of the Hub repository.
+
+This makes your standalone, persona-infused model available for others to download and use directly.
+
 ## ✨ Example Interaction
 
 Here are sample chats showcasing the different personas:
