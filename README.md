@@ -150,3 +150,25 @@ To configure API credentials for data generation, see [API Credentials Setup](do
 - Sentencepiece & Protobuf (for tokenizers)
 - Optional: OpenAI or Anthropic libraries (for data generation)
 - Optional: python-dotenv (for loading API credentials from .env file)
+
+## 📝 License
+
+This project is licensed under the Apache License 2.0 - see the LICENSE file for details.
+
+## 📝 Acknowledgements
+
+- [LoRA](https://arxiv.org/abs/2106.09685)
+- [PEFT](https://arxiv.org/abs/2304.05374)
+- [Hugging Face](https://huggingface.co/)
+- [OpenAI](https://openai.com/)
+- [Anthropic](https://anthropic.com/)
+
+## 📝 Little Padawan
+
+This project is a collaboration between [Master Lonn-san](https://github.com/lonnvanbokhorst) and [Little Padawan](https://github.com/padawan-ai).
+
+## Padawan's Moment of Clarity
+
+Sometimes, even a Padawan has a realization...
+
+![Padawan's realization moment](./padawans-realization.png)
