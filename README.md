@@ -28,7 +28,23 @@ tame-the-weights/
 │   └── env_setup.md            # Guide for setting up API credentials
 ├── trained_adapters/           # Saved adapter models (created during training)
 └── requirements.txt            # Python dependencies
-```
+
+## 💾 Dataset
+
+The fine-tuning process uses a dataset hosted on Hugging Face:
+
+- **[leonvanbokhorst/tame-the-weights-personas](https://huggingface.co/datasets/leonvanbokhorst/tame-the-weights-personas)**
+
+This dataset contains the training examples for all personas (Captain Codebeard, Professor Snugglesworth, Zen Coder). It follows a JSONL format where each line is a JSON object with the following fields:
+
+- `instruction`: The prompt or question given to the persona.
+- `input`: Optional additional context for the instruction.
+- `output`: The desired response from the persona.
+- `persona`: The name of the persona the example belongs to (e.g., "captain_codebeard").
+
+The `fine_tune_persona.py` script automatically downloads and filters this dataset based on the `--persona_name` provided.
+
+While this dataset provides a starting point, you can also generate your own data using the `generate_persona_data.py` script (see below).
 
 ## 🚀 Setup
 
