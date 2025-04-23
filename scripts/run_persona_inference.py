@@ -158,7 +158,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--model_id",
         type=str,
-        default="microsoft/phi-3-mini-4k-instruct",
+        default="microsoft/phi-4-mini-instruct",
         help="Base model ID from Hugging Face Hub.",
     )
     parser.add_argument(

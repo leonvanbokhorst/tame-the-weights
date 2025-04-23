@@ -91,7 +91,7 @@ To fine-tune a base model with a specific persona:
 
 ```bash
 python scripts/fine_tune_persona.py \
-    --model_id "microsoft/phi-3-mini-4k-instruct" \
+    --model_id "microsoft/phi-4-mini-instruct" \
     --dataset_path "persona_data/captain_codebeard.jsonl" \
     --persona_name "captain_codebeard" \
     --output_dir "trained_adapters"

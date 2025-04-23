@@ -129,20 +129,19 @@ def main(args):
                     # Important: We train the model to predict the assistant's response,
                     # including the template tokens around it.
                     # Set add_generation_prompt=False because we provide the full conversation.
-                    model_inputs = tokenizer.apply_chat_template(
+                    tokenized_list = tokenizer.apply_chat_template(
                         inputs,  # Pass the list of message lists
                         add_generation_prompt=False,
                         truncation=True,
-                        padding="max_length",
+                        padding=False, # Let collator handle padding
                         max_length=args.max_seq_length,  # Use an arg for max_length
-                        return_tensors="pt",  # Return PyTorch tensors
                     )
-                    # We need to return a dict compatible with the Trainer
-                    # apply_chat_template might return just input_ids, attention_mask etc.
-                    # For Causal LM, the 'labels' are typically the same as 'input_ids'
-                    # The loss function handles shifting internally.
-                    model_inputs["labels"] = model_inputs["input_ids"].clone()
-                    return model_inputs
+                    # apply_chat_template now returns a list of lists of token IDs
+
+                    # The DataCollatorForLanguageModeling expects 'input_ids' key
+                    # Assign the list of token IDs to 'input_ids'
+                    # Labels will be automatically created by the collator by shifting input_ids
+                    model_inputs = {"input_ids": tokenized_list}
 
                 else:  # Handle single example (less common with batched=True)
                     instruction = examples["instruction"]
@@ -157,15 +156,14 @@ def main(args):
                         {"role": "assistant", "content": output},
                     ]
                     # Tokenize single instance (less efficient)
-                    model_inputs = tokenizer.apply_chat_template(
+                    tokenized_ids = tokenizer.apply_chat_template(
                         msgs,
                         add_generation_prompt=False,
                         truncation=True,
-                        padding="max_length",
+                        padding=False, # Let collator handle padding
                         max_length=args.max_seq_length,  # Use an arg for max_length
-                        return_tensors="pt",
                     )
-                    model_inputs["labels"] = model_inputs["input_ids"].clone()
+                    model_inputs = {"input_ids": tokenized_ids}
                     # Need to un-batch if input was single example for map compatibility?
                     # Let's assume map handles this.
                     return model_inputs
@@ -343,7 +341,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--model_id",
         type=str,
-        default="microsoft/phi-3-mini-4k-instruct",
+        default="microsoft/phi-4-mini-instruct",
         help="Base model ID from Hugging Face Hub.",
     )
     parser.add_argument(
