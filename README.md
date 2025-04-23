@@ -1,5 +1,7 @@
 # Tame the Weights: Plug-and-Play Personas
 
+[Assignment](./assignment.md)
+
 This project implements lightweight persona adapters for language models using Parameter-Efficient Fine-Tuning (PEFT) techniques like LoRA. Each adapter modifies the behavior of a base model to adopt a specific persona, without changing the underlying model weights.
 
 ## 🧙 Personas
@@ -137,11 +139,48 @@ Additional options:
 - `--max_new_tokens`: Maximum tokens to generate (default: 200)
 - `--temperature`: Generation temperature (default: 0.7)
 
+### Merging Adapter with Base Model
+
+Sometimes, you might want to create a standalone model with the persona baked in, rather than loading the base model and adapter separately. This is often necessary for formats like GGUF used by tools like Ollama, or simply for easier distribution.
+
+Use the `scripts/merge_adapter.py` script:
+
+```bash
+# Example merging Captain Codebeard (ensure adapter exists in trained_adapters/)
+python scripts/merge_adapter.py --persona captain_codebeard
+
+# Example merging Professor Snugglesworth into a different output directory
+python scripts/merge_adapter.py --persona professor_snugglesworth --output_dir_base ./final_models
+```
+
+This will load the base model and the specified persona adapter, merge their weights, and save the complete model (including the tokenizer) into a subdirectory within the specified output base directory (defaulting to `merged_models/<persona_name>`).
+
+### Uploading Merged Models to Hugging Face Hub
+
+Once you have a merged model (e.g., in `merged_models/captain_codebeard`), you can upload it to the Hugging Face Hub as a standard model repository.
+
+1.  **Create a new repository** on Hugging Face Hub. It's recommended to give it a descriptive name, e.g., `your-username/phi-4-mini-instruct-captain_codebeard-merged`.
+
+2.  **Upload the files** using the `huggingface-cli`:
+    ```bash
+    # Login if you haven't already
+    # huggingface-cli login
+
+    # Upload the contents of your merged model directory
+    huggingface-cli upload your-username/repo-name-on-hub merged_models/captain_codebeard/ ./
+    ```
+    - Replace `your-username/repo-name-on-hub` with the actual repository ID you created.
+    - Replace `merged_models/captain_codebeard/` with the path to the specific merged model directory.
+    - The final `./` indicates you want to upload the *contents* of the local directory to the *root* of the Hub repository.
+
+This makes your standalone, persona-infused model available for others to download and use directly.
+
 ## ✨ Example Interaction
 
 Here are sample chats showcasing the different personas:
 
 **Captain Codebeard:**
+
 ```terminal
 Enter prompt: Captain, the css is sinking
 Generating response...
@@ -152,6 +191,7 @@ Arr! If yer CSS be sinkin', ye need to refit it like a sturdy ship! Keep yer sty
 ```
 
 **Professor Snugglesworth:**
+
 ```terminal
 Enter prompt: Can you explain quantum entanglement?
 Generating response...
@@ -162,6 +202,7 @@ Ah, quantum entanglement! Think of it like two cats, perhaps napping in differen
 ```
 
 **Zen Coder:**
+
 ```terminal
 Enter prompt: I feel like my life is a syntax error.
 Generating response...
@@ -201,6 +242,24 @@ To configure API credentials for data generation, see [API Credentials Setup](do
 - Sentencepiece & Protobuf (for tokenizers)
 - Optional: OpenAI or Anthropic libraries (for data generation)
 - Optional: python-dotenv (for loading API credentials from .env file)
+
+## 🚢 Available Models on Hugging Face Hub
+
+In addition to the base model, the following persona-specific models and adapters are available:
+
+**LoRA Adapters:**
+
+- [leonvanbokhorst/microsoft-Phi-4-mini-instruct-captain_codebeard-adapter](https://huggingface.co/leonvanbokhorst/microsoft-Phi-4-mini-instruct-captain_codebeard-adapter)
+- [leonvanbokhorst/microsoft-Phi-4-mini-instruct-professor_snugglesworth-adapter](https://huggingface.co/leonvanbokhorst/microsoft-Phi-4-mini-instruct-professor_snugglesworth-adapter)
+- [leonvanbokhorst/microsoft-Phi-4-mini-instruct-zen_coder-adapter](https://huggingface.co/leonvanbokhorst/microsoft-Phi-4-mini-instruct-zen_coder-adapter)
+
+**Standalone Merged Models:**
+
+These models have the LoRA adapter merged into the base model for direct use.
+
+- [leonvanbokhorst/phi-4-mini-instruct-captain_codebeard](https://huggingface.co/leonvanbokhorst/phi-4-mini-instruct-captain_codebeard)
+- [leonvanbokhorst/phi-4-mini-instruct-professor_snugglesworth](https://huggingface.co/leonvanbokhorst/phi-4-mini-instruct-professor_snugglesworth) *(Upload pending)*
+- [leonvanbokhorst/phi-4-mini-instruct-zen_coder](https://huggingface.co/leonvanbokhorst/phi-4-mini-instruct-zen_coder) *(Upload pending)*
 
 ## 📝 License
 
