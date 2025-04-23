@@ -62,12 +62,28 @@ def main(args):
 
     # --- 2. Load Dataset ---
     print(f"Loading dataset from {args.dataset_path}...")
+    # Assumes dataset is on Hugging Face Hub or a local path loadable by datasets
+    # Filters by 'persona' column using args.persona_name
     # Assumes jsonl format with a 'text' field or 'instruction'/'output' fields
-    # TODO: Adapt this based on the actual JSONL structure in persona_data/README.md
+    # TODO: Adapt preprocess_function if dataset structure differs significantly
     try:
-        dataset = load_dataset("json", data_files=args.dataset_path, split="train")
-        print(f"Dataset loaded successfully. Number of examples: {len(dataset)}")
-        print(f"Dataset features: {dataset.features}")
+        # Load the dataset directly from Hugging Face Hub or local path
+        # Assuming 'train' split exists, adjust if needed
+        dataset = load_dataset(args.dataset_path, split="train")
+        print(f"Full dataset loaded. Number of examples: {len(dataset)}")
+
+        # Filter the dataset based on the persona name (assuming 'persona' column)
+        print(f"Filtering for persona: '{args.persona_name}'...")
+        filtered_dataset = dataset.filter(lambda example: example.get("persona") == args.persona_name)
+
+        if len(filtered_dataset) == 0:
+            raise ValueError(
+                f"No data found for persona '{args.persona_name}' in dataset {args.dataset_path}. "
+                f"Check dataset identifier, persona name, and column name ('persona')."
+            )
+        print(f"Filtered dataset ready. Number of examples: {len(filtered_dataset)}")
+        print(f"Dataset features: {filtered_dataset.features}")
+
 
         # Example: Preprocess/tokenize the dataset
         # This is a basic example, needs refinement based on chosen format
@@ -175,15 +191,17 @@ def main(args):
                 )
 
         print("Tokenizing dataset...")
-        tokenized_dataset = dataset.map(
-            preprocess_function, batched=True, remove_columns=dataset.column_names
+        # Use the filtered_dataset for mapping
+        tokenized_dataset = filtered_dataset.map(
+            preprocess_function, batched=True, remove_columns=filtered_dataset.column_names
         )
         print("Dataset tokenized.")
 
     except Exception as e:
         print(f"Error loading or processing dataset: {e}")
         print(
-            "Please ensure the dataset exists, is a valid JSONL file, and matches the expected format."
+            "Please ensure the dataset identifier/path is correct, the dataset is accessible (e.g., public or logged in), "
+            "contains a 'train' split, a 'persona' column (if filtering), and matches the expected format."
         )
         return  # Exit if dataset loading fails
 
@@ -366,10 +384,11 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    # Basic validation
-    if not os.path.exists(args.dataset_path):
-        print(f"Error: Dataset path not found: {args.dataset_path}")
-        exit(1)
+    # Basic validation - REMOVED check for local dataset_path existence
+    # Allow dataset_path to be a HF identifier
+    # if not os.path.exists(args.dataset_path):
+    #     print(f"Error: Dataset path not found: {args.dataset_path}")
+    #     exit(1)
     if not os.path.exists(args.output_dir):
         os.makedirs(args.output_dir)
         print(f"Created output directory: {args.output_dir}")
