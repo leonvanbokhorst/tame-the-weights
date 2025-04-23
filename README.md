@@ -192,6 +192,8 @@ This project is licensed under the Apache License 2.0 - see the LICENSE file for
 
 This project is a collaboration between [Master Lonn-san](https://github.com/lonnvanbokhorst) and [Little Padawan](https://github.com/padawan-ai).
 
+![Padawan's purrfect moment](./purrrfect-code.png)
+
 ## Padawan's Moment of Clarity
 
 Sometimes, even a Padawan has a realization...
@@ -202,3 +204,5 @@ Sometimes, even a Padawan has a realization...
 
 - **captain_codebeard** (microsoft/Phi-4-mini-instruct):
   - [WandB Report](https://api.wandb.ai/links/leonvanbokhorst/x4loxsqk)
+- **professor_snugglesworth** (microsoft/Phi-4-mini-instruct):
+  - [WandB Report](https://wandb.ai/leonvanbokhorst/huggingface/reports/Professor-Snugglesworth--VmlldzoxMjQzNzUyNw)
