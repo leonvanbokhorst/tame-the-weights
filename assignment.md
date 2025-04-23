@@ -1,10 +1,6 @@
 # Tame the Weights: Fine-Tuning GenAI Models for Domain-Specific Brilliance 
 
- 
-
 👋 Hey Engineer, Ever Wanted to Rewire an AI’s Brain? 
-
- 
 
 You’ve used large language models before—they’re smart, fluent, and know way too much about Pokémon and Shakespeare. 
 
@@ -12,67 +8,39 @@ But sometimes… they just don’t get your thing.
 
 Maybe it’s medical jargon. Legal phrasing. Niche company terminology. Or maybe you just want your GenAI to say “Howdy, partner” instead of “Greetings, user.” 
 
- 
-
 Welcome to the world of fine-tuning—where you go beneath the prompt layer and start sculpting the model itself. 
-
- 
 
 Your mission? Build a domain-adapted GenAI model that outperforms the base model on a specific set of tasks, tones, or personas. That means data prep, model wrangling, and maybe even turning some knobs on a LoRA adapter. 😏 
 
- 
-
 ## 💡 Your Big Question 
-
- 
 
 How can we fine-tune or adapt pre-trained GenAI models to perform better in specific domains, tasks, or personas—efficiently and responsibly? 
 
- 
-
 ## 🧭 What You’ll Explore 
-
- 
 
 ### 🧠 Model Adaptation Strategies 
 
 •	When should you full fine-tune vs. use adapters (like LoRA, PEFT) vs. just prompt engineering? 
-
 •	What are the trade-offs in cost, performance, and flexibility? 
-
 •	How do you measure success? 
-
- 
 
 ### 📁 Data Curation for Fine-Tuning 
 
 •	How much data do you need? What quality is required? 
-
 •	How do you balance real-world data with synthetic augmentation? 
-
 •	Can you build balanced datasets that reduce bias instead of increasing it? 
-
- 
 
 ### 🔧 Fine-Tuning Workflows 
 
-•	Which tools or platforms will you use? (Hugging Face, OpenLLM, Axolotl, etc.) 
-
+•	Which tools or platforms will you use? (Hugging Face, OpenLLM, Axolotl, etc.)
 •	How do you handle versioning, checkpoints, rollbacks? 
-
 •	What happens when your fine-tuned model forgets general capabilities? 
-
- 
 
 ### 📉 Evaluation and Validation 
 
 •	How do you test your fine-tuned model without overfitting? 
-
 •	Can you A/B test vs. base model? 
-
 •	What should you track: loss, accuracy, fluency, domain alignment? 
-
- 
 
 ## 🧑‍🔬 Your Project Can Be… 
 

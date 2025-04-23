@@ -1,0 +1,17 @@
+[project]
+name = "tame-the-weights"
+version = "0.1.0"
+description = "Tame the weights project for LLM finetuning by Little Padawan"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "accelerate>=0.29.0",
+    "bitsandbytes>=0.45.5",
+    "datasets>=2.18.0",
+    "peft>=0.10.0",
+    "protobuf>=6.30.2",
+    "python-dotenv>=1.0.0",
+    "sentencepiece>=0.2.0",
+    "torch>=2.6.0",
+    "transformers>=4.40.0",
+]
