@@ -243,6 +243,24 @@ To configure API credentials for data generation, see [API Credentials Setup](do
 - Optional: OpenAI or Anthropic libraries (for data generation)
 - Optional: python-dotenv (for loading API credentials from .env file)
 
+## 🚢 Available Models on Hugging Face Hub
+
+In addition to the base model, the following persona-specific models and adapters are available:
+
+**LoRA Adapters:**
+
+- [leonvanbokhorst/microsoft-Phi-4-mini-instruct-captain_codebeard-adapter](https://huggingface.co/leonvanbokhorst/microsoft-Phi-4-mini-instruct-captain_codebeard-adapter)
+- [leonvanbokhorst/microsoft-Phi-4-mini-instruct-professor_snugglesworth-adapter](https://huggingface.co/leonvanbokhorst/microsoft-Phi-4-mini-instruct-professor_snugglesworth-adapter)
+- [leonvanbokhorst/microsoft-Phi-4-mini-instruct-zen_coder-adapter](https://huggingface.co/leonvanbokhorst/microsoft-Phi-4-mini-instruct-zen_coder-adapter)
+
+**Standalone Merged Models:**
+
+These models have the LoRA adapter merged into the base model for direct use.
+
+- [leonvanbokhorst/phi-4-mini-instruct-captain_codebeard](https://huggingface.co/leonvanbokhorst/phi-4-mini-instruct-captain_codebeard)
+- [leonvanbokhorst/phi-4-mini-instruct-professor_snugglesworth](https://huggingface.co/leonvanbokhorst/phi-4-mini-instruct-professor_snugglesworth) *(Upload pending)*
+- [leonvanbokhorst/phi-4-mini-instruct-zen_coder](https://huggingface.co/leonvanbokhorst/phi-4-mini-instruct-zen_coder) *(Upload pending)*
+
 ## 📝 License
 
 This project is licensed under the Apache License 2.0 - see the LICENSE file for details.
