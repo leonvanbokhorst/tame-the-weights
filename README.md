@@ -259,7 +259,7 @@ In addition to the base model, the following persona-specific models and adapter
 
 **Standalone Merged Models:**
 
-These models have the LoRA adapter merged into the base model for direct use.
+These models have the LoRA adapters merged into the base model for direct use.
 
 - [leonvanbokhorst/phi-4-mini-instruct-captain_codebeard](https://huggingface.co/leonvanbokhorst/phi-4-mini-instruct-captain_codebeard)
 - [leonvanbokhorst/phi-4-mini-instruct-professor_snugglesworth](https://huggingface.co/leonvanbokhorst/phi-4-mini-instruct-professor_snugglesworth)
