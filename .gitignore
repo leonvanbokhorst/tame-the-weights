@@ -8,3 +8,4 @@
 wandb/
 trained_adapters/
 merged_models/
+llama.cpp/
