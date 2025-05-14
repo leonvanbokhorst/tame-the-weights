@@ -109,11 +109,7 @@ This will use our seed examples to generate high-quality training data that foll
 To fine-tune a base model with a specific persona:
 
 ```bash
-python scripts/fine_tune_persona.py \
-    --model_id "microsoft/phi-4-mini-instruct" \
-    --dataset_path "persona_data/captain_codebeard.jsonl" \
-    --persona_name "captain_codebeard" \
-    --output_dir "trained_adapters"
+uv run scripts/fine_tune_persona.py --model_id "microsoft/phi-4-mini-instruct" --dataset_path "leonvanbokhorst/tame-the-weights-personas" --persona_name "captain_codebeard" --output_dir "trained_adapters"
 ```
 
 Additional options:
