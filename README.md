@@ -116,6 +116,8 @@ python scripts/fine_tune_persona.py \
     --output_dir "trained_adapters"
 ```
 
+
+See [Fine-Tuning Persona Adapters](docs/fine_tune_persona.md) for a detailed explanation of this script.
 Additional options:
 
 - `--max_seq_length`: Maximum sequence length for tokenization (default: 512)
